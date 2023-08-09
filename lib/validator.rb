@@ -12,19 +12,29 @@ class Validator
 
   def validate
     sudoku_array =  SudokuFormater.create_two_dimensional_array(@puzzle_string)
-    validation_result = validate_rows(sudoku_array)
-    if validation_result[0] and validation_result[1]
-      return "Sudoku is valid but incomplete."
-    elsif validation_result[0] and !validation_result[1]
-      return "Sudoku is valid."
-    else
+    valid_row, not_complete_row = validate_rows(sudoku_array)
+    valid_col, not_complete_col = validate_cols(sudoku_array)
+
+    if !valid_row or !valid_col
       return "Sudoku is invalid."
+    elsif valid_row and not_complete_row or valid_col and not_complete_col
+      return "Sudoku is valid but incomplete."
+    else
+      return "Sudoku is valid."
     end
   end
 
+
+  def validate_cols(sudoku_array)
+      rotated_array = SudokuFormater.rotate_array(sudoku_array)
+      return validate_rows(rotated_array)
+  end
+
+
+  
   def validate_rows(sudoku_array)
     valid = true
-    not_complete = false
+    not_complete = true
     numbers = []
 
     for sudoku_line in sudoku_array
@@ -40,14 +50,13 @@ class Validator
               numbers.push(number_in_line)
             end
         end
-          if(sudoku_line.include? 0)
-            not_complete = true
+          if(!sudoku_line.include? 0)
+            not_complete = false
           end
         numbers = []
         end
     end
     return valid, not_complete
   end
-
 
 end

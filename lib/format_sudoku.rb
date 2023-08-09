@@ -13,4 +13,14 @@ module SudokuFormater
         return sudoku_array
     end
 
+    def rotate_array(sudoku_array)
+        rotated_array = Array.new(9) { Array.new }
+        for i in 0..sudoku_array.length - 1
+            for j in 0..sudoku_array[i].length - 1
+                rotated_array[j][i] = sudoku_array[i][j]
+            end
+        end
+        return rotated_array
+    end
+
 end
