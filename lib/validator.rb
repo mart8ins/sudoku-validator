@@ -43,7 +43,7 @@ class Validator
         else
           for number_in_line in sudoku_line
             if number_in_line != 0
-              if numbers.include? number_in_line
+              if numbers.include? number_in_line or number_in_line < 0 or number_in_line > 9
                 valid = false
                 break
               end
