@@ -61,30 +61,19 @@ class Validator
   def validate_subgroups(sudoku_array)
     subgroups = []
 
-    while subgroups.length < 9
-      group_a = []
-      group_b = []
-      group_c = []
+    subgroups.push(get_sub_group(0,2,sudoku_array))
+    subgroups.push(get_sub_group(3,5,sudoku_array))
+    subgroups.push(get_sub_group(6,8,sudoku_array))
 
-      for f in 0..2 
-        group_a.push(*sudoku_array[f][0,3])
-      end
-      subgroups.push(group_a)
-      group_a = []
-
-      for s in 3..5
-        group_b.push(*sudoku_array[s][3,3])
-      end
-      subgroups.push(group_b)
-      group_b = []
-
-      for t in 6..8
-        group_c.push(*sudoku_array[t][6,3])
-      end
-      subgroups.push(group_c)
-      group_c = []
-    end
     return validate_rows(subgroups)
+  end
+
+  def get_sub_group(start_index, end_index, array)
+    group = []
+    for i in start_index..end_index
+      group.push(*array[i][start_index,3])
+    end
+    return group
   end
 
 end
