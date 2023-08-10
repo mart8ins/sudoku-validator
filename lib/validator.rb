@@ -33,7 +33,7 @@ class Validator
   
   def validate_rows(sudoku_array)
     not_valid = false
-    not_complete = true
+    not_complete = false
     numbers = []
 
     for sudoku_line in sudoku_array
@@ -49,8 +49,8 @@ class Validator
               numbers.push(number_in_line)
             end
         end
-          if(!sudoku_line.include? 0)
-            not_complete = false
+          if sudoku_line.include? 0
+            not_complete = true
           end
         numbers = []
         end
