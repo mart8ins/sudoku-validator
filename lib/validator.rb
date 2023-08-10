@@ -15,7 +15,9 @@ class Validator
     valid_row, not_complete_row = validate_rows(sudoku_array)
     valid_col, not_complete_col = validate_cols(sudoku_array)
 
-    if !valid_row or !valid_col
+    valid_subgroup, not_complete_subgroup = validate_subgroups(sudoku_array)
+
+    if !valid_subgroup or !valid_row or !valid_col
       return "Sudoku is invalid."
     elsif valid_row and not_complete_row or valid_col and not_complete_col
       return "Sudoku is valid but incomplete."
@@ -24,13 +26,10 @@ class Validator
     end
   end
 
-
   def validate_cols(sudoku_array)
       rotated_array = SudokuFormater.rotate_array(sudoku_array)
       return validate_rows(rotated_array)
   end
-
-
   
   def validate_rows(sudoku_array)
     valid = true
@@ -57,6 +56,35 @@ class Validator
         end
     end
     return valid, not_complete
+  end
+
+  def validate_subgroups(sudoku_array)
+    subgroups = []
+
+    while subgroups.length < 9
+      group_a = []
+      group_b = []
+      group_c = []
+
+      for f in 0..2 
+        group_a.push(*sudoku_array[f][0,3])
+      end
+      subgroups.push(group_a)
+      group_a = []
+
+      for s in 3..5
+        group_b.push(*sudoku_array[s][3,3])
+      end
+      subgroups.push(group_b)
+      group_b = []
+
+      for t in 6..8
+        group_c.push(*sudoku_array[t][6,3])
+      end
+      subgroups.push(group_c)
+      group_c = []
+    end
+    return validate_rows(subgroups)
   end
 
 end
