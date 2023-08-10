@@ -19,9 +19,6 @@ class Validator
     not_valid_subgroup, = validate_subgroups(sudoku_array)
     not_valid_row, not_complete_row = validate_rows(sudoku_array)
     not_valid_col, not_complete_col = validate_cols(sudoku_array)
-
-
-
     if not_valid_subgroup || not_valid_row || not_valid_col
       'Sudoku is invalid.'
     elsif !not_valid_row && not_complete_row || !not_valid_col && not_complete_col
@@ -39,25 +36,26 @@ class Validator
   def validate_rows(sudoku_array)
     not_valid = false
     not_complete = false
-    numbers = []
 
     sudoku_array.each do |sudoku_line|
       break if not_valid
 
-
-      sudoku_line.each do |number_in_line|
-        next unless number_in_line != 0
-
-        if (numbers.include? number_in_line) || number_in_line.negative? || (number_in_line > 9)
-          not_valid = true
-          break
-        end
-        numbers.push(number_in_line)
-      end
+      not_valid = check_for_duplicates(sudoku_line)
       not_complete = true if sudoku_line.include? 0
-      numbers = []
     end
     [not_valid, not_complete]
+  end
+
+  def check_for_duplicates(sudoku_line)
+    numbers = []
+    not_valid = false
+    sudoku_line.each do |number_in_line|
+      next unless number_in_line != 0
+
+      not_valid = true if (numbers.include? number_in_line) || number_in_line.negative? || (number_in_line > 9)
+      numbers.push(number_in_line)
+    end
+    not_valid
   end
 
   def validate_subgroups(sudoku_array)
