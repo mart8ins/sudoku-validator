@@ -36,7 +36,6 @@ class Validator
   def validate_rows(sudoku_array)
     not_valid = false
     not_complete = false
-
     sudoku_array.each do |sudoku_line|
       break if not_valid
 
@@ -60,19 +59,31 @@ class Validator
 
   def validate_subgroups(sudoku_array)
     subgroups = []
-
-    subgroups.push(get_sub_group(0, 2, sudoku_array))
-    subgroups.push(get_sub_group(3, 5, sudoku_array))
-    subgroups.push(get_sub_group(6, 8, sudoku_array))
-
+    subgroups.push(*get_sub_group(0, sudoku_array))
+    subgroups.push(*get_sub_group(3, sudoku_array))
+    subgroups.push(*get_sub_group(6, sudoku_array))
     validate_rows(subgroups)
   end
 
-  def get_sub_group(start_index, end_index, array)
+  def get_sub_group(start_index, array)
     group = []
-    (start_index..end_index).each do |i|
-      group.push(*array[i][start_index, 3])
+    subgroup = []
+    3.times do |j|
+      subgroup.push(*array[j][start_index, 3])
     end
+    group.push(subgroup)
+    subgroup = []
+    (3..5).each do |j|
+      subgroup.push(*array[j][start_index, 3])
+    end
+    group.push(subgroup)
+    subgroup = []
+    (6..8).each do |j|
+      subgroup.push(*array[j][start_index, 3])
+    end
+    group.push(subgroup)
+    subgroup = []
+
     group
   end
 end
